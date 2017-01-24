@@ -1,0 +1,13 @@
+---
+- name: Install telegraf agent/collector (Ubuntu)
+  apt:
+    name: "{{ wavefront_collector }}"
+    state: "{{ wavefront_pkg_state }}"
+    force: 'yes'
+    update_cache: yes
+  register: result
+  until: result|succeeded
+  tags:
+   - install
+   - debian
+   - collector

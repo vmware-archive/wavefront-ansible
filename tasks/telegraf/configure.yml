@@ -1,0 +1,119 @@
+---
+- debug: msg="Proxy {{ item.name }} = {{ item.value }}"
+  with_items:
+    - { name: "address host", value: "{{ proxy_address }}" }
+    - { name: "port", value: "{{ proxy_port }}" }
+  tags:
+    - install
+    - check
+    - failfast
+    - collector
+    - redhat
+    - debian
+    - configure
+
+- name: Fail_Fast if collector agent's proxy port is not open
+  shell: "telnet {{ proxy_address }} {{ proxy_port }}"
+  register: telnet_result
+  failed_when: "'Connection refused' in telnet_result.stderr"
+  tags:
+    - install
+    - check
+    - failfast
+    - collector
+    - redhat
+    - debian
+    - configure
+
+- include: "{{ ansible_os_family }}.yml"
+  tags:
+    - install
+    - redhat
+    - debian
+    - collector
+
+- name: Overwrite main telegraf.conf file with WF custom config 
+  template:
+    src: telegraf.conf.wfcopy.j2
+    dest: "{{ telegraf_main_config }}"
+    mode: 0644
+  notify: restart telegraf
+  tags:
+   - install
+   - redhat
+   - debian
+   - collector
+   - configure
+
+- name: Create Wavefront output plugin config 10-wavefront.conf
+  template:
+    src: 10-wavefront.conf.j2
+    dest: "{{ telegraf_wavefront_output_plugin_config }}"
+    mode: 0644
+  notify: restart telegraf
+  tags:
+   - install
+   - redhat
+   - debian
+   - collector
+   - configure
+
+- name: Create Telegraf additional plugins file
+  template:
+    src: telegraf-custom-host-services-processes.conf.j2
+    dest: "{{ telegraf_custom_plugins_conf_file }}"
+    mode: 0644
+    owner: root
+    group: root
+  notify: restart telegraf
+  tags:
+   - install
+   - redhat
+   - debian
+   - collector
+   - configure
+
+- name: Create telegraf_inputs variable based plugin file
+  template:
+    src: inputs.conf.j2
+    dest: "{{ telegraf_additional_config_dir }}/{{ item }}.conf"
+    mode: 0644
+  notify: restart telegraf
+  with_items: "{{ telegraf_inputs.keys() | default('undefined')  }}"
+  when: telegraf_inputs is defined and telegraf_inputs is iterable
+  ignore_errors: yes
+  tags:
+   - install
+   - redhat
+   - debian
+   - collector
+   - configure
+
+- name: Find Telegraf config files
+  shell: 'find /etc/telegraf -type f -name "*.conf"|sort'
+  register: telegraf_config_files
+  ignore_errors: yes
+  tags:
+   - install
+   - redhat
+   - debian
+   - collector
+   - configure
+
+- name: User MUST validate the existence and the behavior of these config files
+  debug: msg="{{ telegraf_config_files.stdout_lines }}"
+  ignore_errors: yes
+  tags:
+   - install
+   - redhat
+   - debian
+   - collector
+   - configure
+
+- debug: msg='For adding/tweaking Telegraf Plugins, please visit https://github.com/influxdata/telegraf/tree/master/plugins'
+  tags:
+   - install
+   - redhat
+   - debian
+   - collector
+   - configure

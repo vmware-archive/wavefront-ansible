@@ -1,0 +1,13 @@
+---
+# See Role's (wavefronthq.wavefront-ansible) README file for more info on parameters.
+# ansible-playbook -i inventory -l tag_cluster_mon:\&tag_role_ha wavefront-ansible.yml -C --list-hosts
+#
+# A sample wavefront-ansible.yml would look like:
+
+- hosts: localhost
+  remote_user: root
+  gather_facts: true
+  become: true
+  roles:
+    - { role: wavefronthq.wavefront-ansible, wavefront_install_collector: "true", proxy_address: "localhost" }
+    #- { role: wavefronthq.wavefront-ansible, wavefront_install_collector: "true", proxy_address: "<a_proxy_host_for_sending_data_to_wavefront_instance>" }

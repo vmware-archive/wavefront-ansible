@@ -1,0 +1,9 @@
+# # Configuration for Wavefront proxy to send metrics to
+[[outputs.wavefront]]
+# prefix = "telegraf."
+  host = "{{ proxy_address }}"
+  port = {{ proxy_port }}
+  metric_separator = "."
+  source_override = ["hostname", "snmp_host", "node_host"]
+  convert_paths = true
+  use_regex = false

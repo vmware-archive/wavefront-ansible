@@ -1,0 +1,58 @@
+## This file contains all the necessary machine specific services/processes names
+## for which a user may want to get some insight using telegraf's procstat plugin 
+## NOTE: You can use a pattern as well if you want to look for all processes/services.
+##
+## Examples: Uncomment/edit to enable/set for what you are looking for.
+##
+## Telegraf filestat plugin
+[[inputs.filestat]]
+  files = ["/var/run/*/*.pid","/var/run/*.pid"]
+
+#Add more if you want.
+#[[inputs.filestat]]
+#  files = ["/some/path*/some/filename.extension","/some/path/file-*"]
+
+
+
+## For catching all the services by executable. The following will catch all.
+## NOTE: Use only either exe or pattern. Using both will work but result in
+## duplicate metrics one referred by exe and other referred by pattern.
+## exe vs pattern: exe has one extra metric for: number of threads.
+## Telegraf will use: pgrep <executable>
+[[inputs.procstat]]
+  exe = "."
+  prefix = "pgrep_serviceprocess"
+
+## Commenting out pattern stanza below as the above 'exe' stanza is enabled.
+## For catching all processes by a pattern. The following will catch all.
+## Telegraf will use: pgrep -f <pattern>
+#[[inputs.procstat]]
+#  pattern = "."
+#  prefix = "pgrep_serviceprocess"
+
+
+
+##OR one can also define multiple users like this: 
+##If same user is defined twice in this file, it'll not error.
+#[[inputs.procstat]]
+#  user = "root,vagrant,bamboo,jenkins"
+#  prefix = "pgrep_serviceprocess"
+
+##For catching processes by a user.
+## Telegraf will use: pgrep -u <user>
+[[inputs.procstat]]
+  user = "{{ lookup('env','USER') }}"
+  prefix = "pgrep_serviceprocess"
+
+[[inputs.procstat]]
+  user = "telegraf"
+  prefix = "pgrep_serviceprocess"
+
+[[inputs.procstat]]
+  user = "root"
+  prefix = "pgrep_serviceprocess"
+
+
+##Also look into [[inputs.exec]] input plugin for your specific requirements.
+##Refer: https://github.com/influxdata/telegraf/tree/master/plugins
+##     : https://github.com/influxdata/telegraf/tree/master/plugins/inputs/exec

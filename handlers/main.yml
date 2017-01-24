@@ -1,0 +1,14 @@
+---
+#Can't use "use:" property as systemctl is failing
+#- name: restart wavefront-proxy
+#  service: name=wavefront-proxy state=restarted enabled=yes
+- name: restart wavefront-proxy
+  command: service {{ wavefront_proxy_pkg }} restart
+  become: yes
+
+- name: restart telegraf
+  service:
+    name: telegraf
+    state: restarted
+    enabled: yes
+  become: yes

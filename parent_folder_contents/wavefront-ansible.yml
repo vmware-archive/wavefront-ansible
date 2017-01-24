@@ -1,0 +1,15 @@
+---
+  # PS wavefronthq.wavefront-ansible role level README file and parent_folder_contents/* for more info.
+  # ansible-playbook -i inventory -l tag_cluster_mon:\&tag_role_ha wavefront-ansible.yml -C --list-hosts
+
+
+- hosts: all
+  become: true
+  gather_facts: true
+  serial: "{{ serialNumber }}"
+
+  vars:
+    - serialNumber: 1
+
+  roles:
+    - wavefronthq.wavefront-ansible

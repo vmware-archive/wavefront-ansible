@@ -1,0 +1,77 @@
+---
+- name: Fail_Fast if Wavefront URL/Token authentication fails
+  uri:
+    url: "{{ wavefront_api_url }}/daemon/test?token={{ wavefront_api_token }}"
+    method: POST
+    force_basic_auth: yes
+    return_content: yes
+    follow_redirects: all
+    status_code: 200
+  when: wavefront_install_proxy == "true" or wavefront_create_cred_file == "true"
+  tags:
+   - install
+   - check
+   - failfast
+   - proxy
+   - redhat
+   - debian
+   - configure
+
+- include: "{{ ansible_os_family }}.yml"
+  tags:
+    - install
+    - debian
+    - redhat
+    - proxy
+
+- name: Update Wavefront Proxy config file
+  template: 
+    src: wavefront-proxy.conf.j2
+    dest: "{{ wavefront_config }}"
+    mode: 0644
+    owner: root
+    group: root
+  when: wavefront_install_proxy == "true"
+  notify: restart wavefront-proxy
+  tags:
+   - install
+   - redhat
+   - debian
+   - proxy
+   - configure
+
+- name: Remove wavefront.conf.default file
+  file: path="{{ wavefront_config }}.default" state=absent 
+  notify: restart wavefront-proxy
+  tags:
+   - install
+   - redhat
+   - debian
+   - proxy
+   - configure
+
+- name: Ensure ~/.wavefront folder exists
+  file: 
+    path: "{{ lookup('env','HOME') }}/.wavefront" 
+    state: directory
+    mode: 0700
+    owner: "{{ lookup('env','USER') }}"
+  when: wavefront_create_cred_file == "true"
+  tags:
+   - install
+   - redhat
+   - debian
+   - proxy
+
+- name: Create ~/.wavefront/credentials file
+  template: 
+    src: proxy_auth_credentials.set.j2
+    dest: "{{ wavefront_cred_file }}"
+    mode: 0600
+    owner: "{{ lookup('env','USER') }}"
+  when: wavefront_create_cred_file == "true" and wavefront_url != "" and wavefront_api_token != ""
+  tags:
+   - install
+   - redhat
+   - debian
+   - proxy

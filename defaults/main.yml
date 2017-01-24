@@ -1,0 +1,90 @@
+---
+# defaults file for wavefront
+wavefront_instance: "try"
+#wavefront_instance: "mon"
+wavefront_url: "https://{{ wavefront_instance }}.wavefront.com"
+wavefront_api_url: "{{ wavefront_url }}/api"
+wavefront_api_token: 'DUMMY_WF_URL_API_TOKEN'
+wavefront_cred_file: "{{ lookup('env','HOME') }}/.wavefront/credentials"
+wavefront_create_cred_file: false
+
+wavefront_proxy_pkg_url: 'https://packagecloud.io/wavefront/proxy'
+wavefront_telegraf_pkg_url: 'https://packagecloud.io/wavefront/telegraf'
+wavefront_pkg_state: 'installed'
+
+# to set a version of the agent use wavefront-proxy=X.Y.Z
+wavefront_proxy_pkg:  'wavefront-proxy'
+wavefront_config_dir: '/etc/wavefront/{{ wavefront_proxy_pkg }}'
+wavefront_config: "{{ wavefront_config_dir }}/wavefront.conf"
+wavefront_agent_extra_args:
+wavefront_agent_config_args:
+wavefront_collector: 'telegraf'
+wavefront_install_proxy: false
+wavefront_install_collector: false
+
+wavefront_repo_base_url: "https://packagecloud.io/install/repositories/wavefront/{{ item.tool }}"
+wavefront_repo_install_url: "{{ wavefront_repo_base_url }}/config_file.repo?os={{ item.release }}&dist={{ item.version }}&source=script"
+
+#Other pip package related attributes
+wavefront_pip_pkg: wavefront-cli
+wavefront_cmd: wave
+
+#telegraf variables
+#telegraf_config_wfcopy: "https://raw.githubusercontent.com/wavefrontHQ/integrations/master/telegraf/telegraf.conf"
+telegraf_config_dir: "/etc/telegraf"
+telegraf_main_config: "{{ telegraf_config_dir }}/telegraf.conf"
+telegraf_additional_config_dir: "{{ telegraf_config_dir }}/telegraf.d"
+telegraf_wavefront_output_plugin_config: "{{ telegraf_additional_config_dir }}/10-wavefront.conf"
+telegraf_custom_plugins_conf_file: "{{ telegraf_additional_config_dir }}/telegraf-custom-host-services-processes.conf"
+telegraf_port: 2878
+
+proxy_address: "ip-10-200-100-28.us-west-2.compute.internal"
+proxy_port: "{{ telegraf_port }}"
+
+
+##'telegraf_tags' variable goes inside /etc/telegraf/telegraf.conf file under '[global_tags]' section.
+##Note: At command line, user can also pass the following variable as JSON glob but it's not that clean.
+##Ex: -e '{ "telegraf_tags":[{name: 'Tag1',value: 'Tag1sValue'},{name: 'Tag2',value: 'Tag2sValue'}] }'
+#
+#-or- defining this variable the following way is better.
+#
+#telegraf_tags:
+#   - { name: 'Tag1', value: 'Tag1sValue' }
+#   - { name: 'Tag2', value: 'Tag2sValue' }
+#
+#-or- even better, define it as shown below. 
+#Pass 'service' and 'env' variables at cmd line.
+#
+#telegraf_tags:
+#  - name: service
+#    value: "{{ service }}"
+#  - name: env
+#    value: "{{ env }}"
+
+##Similarly, 'telegraf_inputs' variable can be sent/passed/set the same way.
+##'telegraf_inputs' variable (as mentioned below), when enabled will set file:
+##/etc/telegraf/telegraf.d/inputs.influxdb.conf (as the key value is: inputs.influxdb)
+##You can create any file name under telegraf.d folder by setting individual key values acc.
+#
+##Example: As an example, uncomment/add similar stanzas as shown below. 
+##The following will create 2 files if both stanzas are uncommented.
+#telegraf_inputs:
+#  inputs.influxdb:
+#    urls: '["http://localhost:{{ proxy_port }}/file_{{ proxy_port }}.html"]'
+#    name_override: '"enter_a_valid_metric_name_override_value"'
+#  inputs.theNextGenMetrics:
+#    urls: 'https://mon.wavefront.com'
+#    name_override: '"extra_inputs_influxdb"'
+
+
+#statsd variables. This feature will be added soon.
+statsd_port: 8125
+statsd_wavefront_config: "{{ telegraf_additional_config_dir }}/10-statsd.conf"
+
+#opentsdb variables
+opentsdb_port: 4242
+
+## aws telegraf variables. This feature will be added soon.
+aws_region: us-west-2
+aws_secret_key_id: AWS_DUMMY_SECRET_KEY_ID
+aws_secret_key: AWS_DUMMY_SECRET_KEY
