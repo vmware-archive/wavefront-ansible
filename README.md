@@ -171,6 +171,17 @@ Optional
    Telegarf Dashboard template JSON file available here: 
    https://raw.githubusercontent.com/wavefrontHQ/integrations/master/telegraf/dashboards/telegraf-host.json
 
+
+Installation of Ansible Galaxy role 
+-----------------------------------
+`ansible-galaxy install <role> -p <path>` step will result in an error if `ansible-galaxy` used is coming from Python 3.x version.
+
+Error: `Failed to get data from the API server - a bytes-like object is required, not 'str'`
+ 
+To resolve the above issue, make sure you use `ansible-galaxy` which is not using Python 3.x binaries.
+For more info see here: http://stackoverflow.com/questions/41837789/ansible-galaxy-failing-for-init-install-failed-to-get-data-from-the-api-server
+
+
 License
 -------
 
