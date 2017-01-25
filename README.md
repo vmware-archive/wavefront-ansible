@@ -178,5 +178,5 @@ Apache 2.0
 
 Author Information
 ------------------
-Arun Sangal <arun@wavefront.com>
+Ops Team <ops@wavefront.com>
 Use github issues for bugs in this repo.
