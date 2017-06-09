@@ -29,7 +29,7 @@ server={{ wavefront_api_url }}/
 #   possibly including the datacenter information, etc. This hostname does not need to correspond to
 #   any actual hostname or DNS entry; it's merely a string that we pass with the internal stats.
 #
-hostname={{ lookup('env','HOSTNAME') }}
+hostname={{ ansible_hostname }}
 
 # The Token is any valid API Token for your account, which can be generated from the gear icon
 #   at the top right of the Wavefront site, under 'Settings'. Paste that hexadecimal token
