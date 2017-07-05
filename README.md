@@ -15,13 +15,13 @@ Role Variables
 --------------
 The following variables are available for override.
 ```
+proxy_address=GIVE_VALID_PROXY_ADDRESS                           # Required, if collector(true)
+proxy_port=2878_is_a_valid_port (default: 2878)                  # Required, if collector(true)
+wavefront_api_token: GIVE_A_VALID_API_TOKEN                      # Required, if wavefront_install_proxy(true). Your API Key
 instance: <wavefront_instance_name> (default: try)               # Optional. Instance name
 wavefront_api_url: https://try.wavefront.com (default)           # Optional. WaveFront URL
-wavefront_api_token: xx1122ZZ3344111_GIVE_A_VALID_API_T0KEN      # Required, if wavefront_install_proxy(true). Your API Key
 wavefront_install_proxy=true (default: false)                    # Optional.
 wavefront_install_collector=true (default: false)                # Optional.
-proxy_address=valid.proxy.hostname (default: a WaveFront Proxy)  # Required, if collector(true)
-proxy_port=2878_is_a_valid_port (default: 2878)                  # Required, if collector(true)
 wavefront_create_cred_file=true (default: false)                 # Optional.
 telegraf_tags                                                    # Optional. Check <roles>/defaults/main.yml for more info.
 telegraf_inputs                                                  # Optional. Check <roles>/defaults/main.yml for more info.
@@ -46,11 +46,11 @@ How To Install
 ----------------
 Using ansible galaxy, best for ad-hoc command situations:
 
-    $ ansible-galaxy install wavefronthq.wavefront-ansible
+    $ ansible-galaxy install wavefrontHQ.wavefront-ansible
 
 To install into your playbook roles, use `-p ROLES_PATH` or `--path=ROLES_PATH`
 
-    $ ansible-galaxy install wavefronthq.wavefront-ansible -p /your/project/root/roles
+    $ ansible-galaxy install wavefrontHQ.wavefront-ansible -p /your/project/root/roles
 
 Check out: [Advanced Control over Role Requirements Files](http://docs.ansible.com/galaxy.html#advanced-control-over-role-requirements-files)
 
@@ -62,15 +62,15 @@ Create a sample playbook (yml) file like shown below. Name it for ex: `wavefront
 
 ```
 ---
-# See Role's (wavefronthq.wavefront-ansible) README file for more info on parameters.
+# See Role's (wavefrontHQ.wavefront-ansible) README file for more info on parameters.
 
 - hosts: all
   gather_facts: true
   remote_user: root
   become: true
   roles:
-    - { role: wavefronthq.wavefront-ansible, wavefront_install_collector: "true", proxy_address: "localhost" }
-    #- { role: wavefronthq.wavefront-ansible, wavefront_install_collector: "true", proxy_address: "<a_proxy_host_for_sending_data_to_wavefront_instance>" }
+    - { role: wavefrontHQ.wavefront-ansible, wavefront_install_collector: "true", proxy_address: "localhost" }
+    #- { role: wavefrontHQ.wavefront-ansible, wavefront_install_collector: "true", proxy_address: "<a_proxy_host_for_sending_data_to_wavefront_instance>" }
 ```
 
 
