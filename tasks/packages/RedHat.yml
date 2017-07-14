@@ -30,7 +30,7 @@
    - collector
 
 - name: Yum complete transaction cleanup only
-  command: yum-complete-transaction --cleanup-only
+  command: yum-complete-transaction --cleanup-only -y
   become_user: root
   tags:
    - prereqs
