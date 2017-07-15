@@ -1,7 +1,6 @@
 ---
 # defaults file for wavefront
 wavefront_instance: "try"
-#wavefront_instance: "mon"
 wavefront_url: "https://{{ wavefront_instance }}.wavefront.com"
 wavefront_api_url: "{{ wavefront_url }}/api"
 wavefront_api_token: 'DUMMY_WF_URL_API_TOKEN'
@@ -38,7 +37,7 @@ telegraf_wavefront_output_plugin_config: "{{ telegraf_additional_config_dir }}/1
 telegraf_custom_plugins_conf_file: "{{ telegraf_additional_config_dir }}/telegraf-custom-host-services-processes.conf"
 telegraf_port: 2878
 
-proxy_address: "ip-10-200-100-28.us-west-2.compute.internal"
+proxy_address: "DUMMY_PROXY_ADDRESS"
 proxy_port: "{{ telegraf_port }}"
 
 #statsd variables. This feature will be added soon.
