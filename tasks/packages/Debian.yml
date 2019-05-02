@@ -16,7 +16,7 @@
 
 - name: Add Wavefront apt repository key.
   apt_key:
-    url: https://packagecloud.io/wavefront/proxy-next/gpgkey
+    url: url: "{{ wavefront_repo_gpgkey }}"
     state: present
     validate_certs: no
   when: wavefront_install_proxy == "true"
