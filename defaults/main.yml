@@ -9,6 +9,7 @@ wavefront_create_cred_file: false
 
 wavefront_proxy_pkg_url: 'https://packagecloud.io/wavefront/proxy'
 wavefront_telegraf_pkg_url: 'https://packagecloud.io/wavefront/telegraf'
+wavefront_repo_gpgkey: "https://packagecloud.io/wavefront/proxy/gpgkey"
 wavefront_pkg_state: 'installed'
 
 # to set a version of the agent use wavefront-proxy=X.Y.Z
