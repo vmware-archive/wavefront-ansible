@@ -1,0 +1,36 @@
+name: Python package
+
+on:
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: ["2.7"]
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v2
+      with:
+        python-version: ${{ matrix.python-version }}
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        python -m pip install ansible
+    - name: Create config
+      run: printf '[defaults]\nroles_path=../' >ansible.cfg
+    - name: Basic Syntax Check
+      run: ansible-playbook tests/test.yml -i tests/inventory --syntax-check
+
+    - name: Send Webhook to Ansible Galaxy
+      uses: distributhor/workflow-webhook@v2
+      env:
+        webhook_url: https://galaxy.ansible.com/api/v1/notifications/
